@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carlos & Elen — Sete Meses</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@500;700&family=Poppins:ital,wght@0,300;0,400;0,600;1,400&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --cream: #FBF3E7;
+      --cream-2: #F3E6D3;
+      --navy: #1F2A44;
+      --blush: #E2949F;
+      --mustard: #DFA13C;
+      --ink: #2B2420;
+      --paper-shadow: rgba(43, 36, 32, .18);
+      --stitch: #C9BBA0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 20% 0%, rgba(223, 161, 60, .10), transparent 55%),
+        radial-gradient(ellipse at 90% 10%, rgba(226, 148, 159, .14), transparent 50%),
+        var(--cream);
+      color: var(--ink);
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* subtle paper grain */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .5;
+      z-index: 1;
+      background-image:
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, .015) 0 1px, transparent 1px 3px),
+        repeating-linear-gradient(90deg, rgba(0, 0, 0, .012) 0 1px, transparent 1px 3px);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    /* ---------- ENVELOPE INTRO ---------- */
+    #envelope-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(160deg, var(--navy), #131b2d 70%);
+      transition: opacity .9s ease, visibility .9s ease;
+    }
+
+    #envelope-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .stub {
+      position: relative;
+      background: var(--cream);
+      padding: 46px 40px 40px;
+      width: min(340px, 82vw);
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+      border: 1px dashed var(--stitch);
+      cursor: pointer;
+      transform: translateY(0);
+      transition: transform .35s ease, box-shadow .35s ease;
+    }
+
+    .stub:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, .5);
+    }
+
+    .stub::before,
+    .stub::after {
+      content: "";
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      background: var(--navy);
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .stub::before {
+      left: -13px;
+    }
+
+    .stub::after {
+      right: -13px;
+    }
+
+    .stub small {
+      display: block;
+      letter-spacing: .16em;
+      font-size: .68rem;
+      color: var(--blush);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .stub h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 8vw, 2.6rem);
+      letter-spacing: .03em;
+      margin: 0 0 6px;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .stub p {
+      margin: 14px 0 0;
+      font-size: .85rem;
+      color: var(--ink);
+      opacity: .75;
+    }
+
+    .stub .tap {
+      margin-top: 22px;
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem;
+      color: var(--navy);
+      opacity: .8;
+    }
+
+    .stub .tap svg {
+      vertical-align: -6px;
+      margin-left: 4px;
+    }
+
+    /* ---------- MAIN CONTENT ---------- */
+    main {
+      position: relative;
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity .9s ease .1s, transform .9s ease .1s;
+    }
+
+    main.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    section {
+      padding: 90px 24px;
+      max-width: 980px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* floating hearts/notes, decorative, low density */
+    .float-deco {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .float-deco span {
+      position: absolute;
+      bottom: -40px;
+      font-size: 1.4rem;
+      opacity: .35;
+      animation: rise linear infinite;
+      color: var(--blush);
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: .4;
+      }
+
+      90% {
+        opacity: .25;
+      }
+
+      100% {
+        transform: translateY(-110vh) rotate(25deg);
+        opacity: 0;
+      }
+    }
+
+    /* ---------- HERO ---------- */
+    #hero {
+      min-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding-top: 60px;
+    }
+
+    .kicker {
+      font-family: 'Caveat', cursive;
+      font-size: 1.4rem;
+      color: var(--navy);
+      background: var(--mustard);
+      display: inline-block;
+      padding: 4px 18px;
+      transform: rotate(-3deg);
+      box-shadow: 3px 3px 0 var(--paper-shadow);
+      margin-bottom: 26px;
+    }
+
+    .hero-names {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.2rem, 13vw, 7.5rem);
+      line-height: .92;
+      letter-spacing: .01em;
+      color: var(--navy);
+      margin: 0;
+    }
+
+    .hero-names .amp {
+      display: block;
+      color: var(--blush);
+      font-size: .5em;
+      margin: 6px 0;
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .hero-sub {
+      max-width: 520px;
+      margin: 28px auto 0;
+      font-weight: 300;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      opacity: .82;
+    }
+
+    .ticket {
+      margin-top: 44px;
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 6px 14px;
+      background: var(--navy);
+      color: var(--cream);
+      padding: 12px 26px;
+      border-radius: 999px;
+      font-size: .85rem;
+      letter-spacing: .04em;
+      position: relative;
+      max-width: 92vw;
+    }
+
+    .ticket b {
+      color: var(--mustard);
+    }
+
+    .sold-out {
+      position: absolute;
+      top: -14px;
+      right: -18px;
+      background: var(--blush);
+      color: var(--cream);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: .65rem;
+      letter-spacing: .1em;
+      padding: 4px 10px;
+      border-radius: 3px;
+      transform: rotate(8deg);
+      box-shadow: 2px 2px 0 var(--paper-shadow);
+    }
+
+    .x-factor-line {
+      font-family: 'Caveat', cursive;
+      font-size: 1.1rem;
+      color: var(--navy);
+      opacity: .7;
+      margin-top: 14px;
+    }
+
+    .eras-line {
+      font-family: 'Caveat', cursive;
+      font-size: 1.05rem;
+      color: var(--blush);
+      opacity: .85;
+      margin: 10px 0 0;
+      text-align: center;
+    }
+
+    .fan-tag {
+      display: inline-block;
+      font-size: .62rem;
+      letter-spacing: .14em;
+      color: var(--navy);
+      opacity: .5;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ---------- STICKERS / FIGURINHAS ---------- */
+    .sticker {
+      position: absolute;
+      pointer-events: none;
+      z-index: 3;
+      filter: drop-shadow(2px 3px 0 var(--paper-shadow));
+    }
+
+    .sticker svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .doodle-tag {
+      position: absolute;
+      pointer-events: none;
+      z-index: 3;
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      font-size: 1.05rem;
+      background: var(--cream-2);
+      color: var(--navy);
+      padding: 4px 14px;
+      border: 1.5px dashed var(--stitch);
+      box-shadow: 2px 2px 0 var(--paper-shadow);
+      white-space: nowrap;
+    }
+
+    .doodle-tag.blush {
+      background: var(--blush);
+      color: var(--cream);
+      border-color: rgba(255, 255, 255, .5);
+    }
+
+    .doodle-tag.navy {
+      background: var(--navy);
+      color: var(--cream);
+      border-color: rgba(255, 255, 255, .25);
+    }
+
+    @media (max-width: 700px) {
+      .sticker {
+        transform-origin: center;
+      }
+
+      .sticker.hide-mobile {
+        display: none;
+      }
+
+      .doodle-tag {
+        font-size: .85rem;
+        padding: 3px 10px;
+      }
+
+      .doodle-tag.hide-mobile {
+        display: none;
+      }
+    }
+
+    /* ---------- TIMELINE (7 meses) ---------- */
+    .section-head {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-head .kicker {
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+      transform: none;
+    }
+
+    .section-head h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      color: var(--navy);
+      margin: 6px 0 10px;
+      letter-spacing: .01em;
+    }
+
+    .section-head p {
+      opacity: .7;
+      max-width: 480px;
+      margin: 0 auto;
+      font-weight: 300;
+    }
+
+    .timeline {
+      position: relative;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 27px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: repeating-linear-gradient(to bottom, var(--stitch) 0 8px, transparent 8px 14px);
+    }
+
+    .t-item {
+      position: relative;
+      padding-left: 74px;
+      margin-bottom: 40px;
+      cursor: pointer;
+    }
+
+    .t-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .t-item:focus {
+      outline: none;
+    }
+
+    .t-item:focus-visible .t-num {
+      box-shadow: 0 0 0 3px rgba(31, 42, 68, .25);
+    }
+
+    .t-content {
+      transition: opacity .7s ease, filter .7s ease, transform .7s ease;
+    }
+
+    .t-item:not(.revealed) .t-content {
+      opacity: .3;
+      filter: blur(4px);
+      transform: translateY(2px);
+      pointer-events: none;
+    }
+
+    .t-item.revealed .t-content {
+      opacity: 1;
+      filter: none;
+      transform: none;
+    }
+
+    .t-item.revealed {
+      cursor: default;
+    }
+
+    .t-lock {
+      position: absolute;
+      left: 74px;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      font-family: 'Caveat', cursive;
+      font-size: 1.15rem;
+      color: var(--navy);
+      opacity: .75;
+      transition: opacity .4s ease;
+      pointer-events: none;
+    }
+
+    .t-item.revealed .t-lock {
+      opacity: 0;
+    }
+
+    .t-num {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 56px;
+      height: 56px;
+      background: var(--cream);
+      border: 2px solid var(--navy);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      color: var(--navy);
+      transition: background .4s ease, color .4s ease, transform .3s ease;
+      z-index: 1;
+    }
+
+    .t-item:not(.revealed):hover .t-num {
+      transform: scale(1.08);
+    }
+
+    .t-item.revealed .t-num {
+      background: var(--navy);
+      color: var(--cream);
+    }
+
+    .t-item h3 {
+      margin: 4px 0 4px;
+      font-size: 1.05rem;
+    }
+
+    .t-item .song {
+      font-family: 'Caveat', cursive;
+      color: var(--blush);
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .t-item p {
+      margin: 6px 0 0;
+      font-weight: 300;
+      font-size: .92rem;
+      opacity: .8;
+      max-width: 460px;
+    }
+
+    /* ---------- SONG PLAY BUTTON ---------- */
+    .song-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 4px 0 4px;
+    }
+
+    .song-row .song {
+      margin: 0;
+    }
+
+    .play-btn {
+      flex: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1.4px solid var(--blush);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blush);
+      cursor: pointer;
+      padding: 0;
+      transition: background .25s ease, color .25s ease, transform .2s ease;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.08);
+    }
+
+    .play-btn.playing {
+      background: var(--blush);
+      color: var(--cream);
+    }
+
+    .play-btn svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    .play-btn .icon-pause {
+      display: none;
+    }
+
+    .play-btn.playing .icon-play {
+      display: none;
+    }
+
+    .play-btn.playing .icon-pause {
+      display: block;
+    }
+
+    .eq {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 12px;
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+
+    .eq.active {
+      opacity: 1;
+    }
+
+    .eq i {
+      display: block;
+      width: 2.4px;
+      border-radius: 1px;
+      background: var(--blush);
+      animation: eq-bounce 0.85s ease-in-out infinite;
+    }
+
+    .eq i:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    .eq i:nth-child(2) {
+      animation-delay: .18s;
+    }
+
+    .eq i:nth-child(3) {
+      animation-delay: .36s;
+    }
+
+    @keyframes eq-bounce {
+
+      0%,
+      100% {
+        height: 3px;
+      }
+
+      50% {
+        height: 12px;
+      }
+    }
+
+    /* ---------- GALLERY / FLIP CARDS ---------- */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 34px 26px;
+      margin-top: 20px;
+    }
+
+    .card {
+      perspective: 1400px;
+      height: 300px;
+      cursor: pointer;
+    }
+
+    .card:nth-child(odd) .flip {
+      transform: rotate(-2deg);
+    }
+
+    .card:nth-child(even) .flip {
+      transform: rotate(1.5deg);
+    }
+
+    .card:nth-child(3n) .flip {
+      transform: rotate(-1deg);
+    }
+
+    .flip {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform .7s cubic-bezier(.4, .2, .2, 1);
+    }
+
+    .card.flipped .flip {
+      transform: rotateY(180deg) rotate(0deg) !important;
+    }
+
+    .face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 3px;
+      overflow: hidden;
+      box-shadow: 0 14px 30px var(--paper-shadow);
+      border: 8px solid #fff;
+    }
+
+    .face.front {
+      position: relative;
+      background: linear-gradient(150deg, var(--cream-2), #E9D8BF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .face.front::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: var(--photo-bg, none);
+      background-size: cover;
+      background-position: center;
+      filter: blur(22px) brightness(.85) saturate(1.1);
+      transform: scale(1.18);
+      opacity: 0;
+      transition: opacity .35s ease;
+      z-index: 0;
+    }
+
+    .face.front.has-photo::before {
+      opacity: 1;
+    }
+
+    .face.front img {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .face.front .placeholder {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 20px;
+      color: var(--navy);
+      opacity: .55;
+    }
+
+    .face.front .placeholder svg {
+      margin-bottom: 8px;
+    }
+
+    .face.front .placeholder span {
+      display: block;
+      font-family: 'Caveat', cursive;
+      font-size: 1.1rem;
+    }
+
+    .tag {
+      position: absolute;
+      top: 10px;
+      right: -6px;
+      background: var(--mustard);
+      color: var(--navy);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: .85rem;
+      padding: 3px 12px;
+      box-shadow: 2px 2px 0 var(--paper-shadow);
+    }
+
+    .face.back {
+      background: var(--navy);
+      color: var(--cream);
+      transform: rotateY(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .face.back p {
+      font-family: 'Caveat', cursive;
+      font-size: 1.35rem;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .hint {
+      text-align: center;
+      margin-top: 30px;
+      font-family: 'Caveat', cursive;
+      font-size: 1.1rem;
+      opacity: .65;
+    }
+
+    /* ---------- VIDEO MESSAGE ---------- */
+    .video-wrap {
+      position: relative;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .video-frame {
+      display: inline-block;
+      border: 10px solid #fff;
+      box-shadow: 0 14px 40px var(--paper-shadow);
+      background: linear-gradient(150deg, var(--cream-2), #EADCC7);
+      padding: 14px;
+      transform: rotate(-1.1deg);
+      max-width: 640px;
+      width: 100%;
+      position: relative;
+    }
+
+    .video-frame .rec-tag {
+      position: absolute;
+      top: -12px;
+      left: 22px;
+      background: var(--mustard);
+      color: var(--navy);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: .8rem;
+      letter-spacing: .06em;
+      padding: 4px 12px;
+      box-shadow: 2px 2px 0 var(--paper-shadow);
+      transform: rotate(-2deg);
+    }
+
+    .video-frame .drive-embed {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      /* proporção 16:9 */
+      border-radius: 2px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .video-frame .drive-embed iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .video-placeholder {
+      padding: 70px 20px;
+      text-align: center;
+      color: var(--navy);
+      opacity: .55;
+      background: linear-gradient(150deg, var(--cream-2), #E9D8BF);
+    }
+
+    .video-placeholder svg {
+      margin-bottom: 10px;
+    }
+
+    .video-placeholder span {
+      display: block;
+      font-family: 'Caveat', cursive;
+      font-size: 1.15rem;
+    }
+
+    /* ---------- CARTINHA ---------- */
+    #letter {
+      padding-top: 40px;
+    }
+
+    .letter-wrap {
+      position: relative;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    /* ---------- CARTINHA: efeito de revelar ---------- */
+    .letter-wrap {
+      cursor: pointer;
+    }
+
+    .letter-wrap.revealed {
+      cursor: default;
+    }
+
+    .letter-wrap:focus {
+      outline: none;
+    }
+
+    .letter-wrap:focus-visible .letter-paper {
+      box-shadow: 0 0 0 3px rgba(31, 42, 68, .25), 0 18px 46px var(--paper-shadow);
+    }
+
+    .letter-content {
+      transition: opacity .7s ease, filter .7s ease, transform .7s ease;
+    }
+
+    .letter-wrap:not(.revealed) .letter-content {
+      opacity: .3;
+      filter: blur(4px);
+      transform: translateY(2px);
+      pointer-events: none;
+    }
+
+    .letter-wrap.revealed .letter-content {
+      opacity: 1;
+      filter: none;
+      transform: none;
+    }
+
+    .letter-lock {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      color: var(--navy);
+      opacity: .85;
+      transition: opacity .4s ease;
+      pointer-events: none;
+    }
+
+    .letter-wrap.revealed .letter-lock {
+      opacity: 0;
+    }
+
+    .letter-song {
+      margin: 0 0 16px;
+    }
+
+    .tape {
+      position: absolute;
+      z-index: 4;
+      width: 86px;
+      height: 30px;
+      opacity: .8;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, .12);
+    }
+
+    .tape::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, .35) 0 3px, transparent 3px 7px);
+    }
+
+    .tape-left {
+      top: -14px;
+      left: 14%;
+      background: var(--mustard);
+      transform: rotate(-8deg);
+    }
+
+    .tape-right {
+      top: -12px;
+      right: 12%;
+      background: var(--blush);
+      transform: rotate(7deg);
+    }
+
+    .letter-paper {
+      position: relative;
+      display: inline-block;
+      text-align: left;
+      width: 100%;
+      max-width: 620px;
+      background: linear-gradient(150deg, var(--cream-2), #EADCC7);
+      border: 10px solid #fff;
+      box-shadow: 0 18px 46px var(--paper-shadow);
+      padding: 46px 42px 40px;
+      transform: rotate(-0.8deg);
+    }
+
+    .letter-stamp {
+      position: absolute;
+      top: 22px;
+      right: 28px;
+      width: 62px;
+      height: 62px;
+      border: 2px dashed var(--stitch);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(8deg);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: .58rem;
+      letter-spacing: .04em;
+      color: var(--navy);
+      opacity: .55;
+      text-align: center;
+      line-height: 1.15;
+      padding: 4px;
+    }
+
+    .letter-date {
+      font-family: 'Caveat', cursive;
+      font-size: 1.05rem;
+      color: var(--navy);
+      opacity: .7;
+      margin: 0 0 18px;
+    }
+
+    .letter-text {
+      font-family: 'Caveat', cursive;
+      font-weight: 500;
+      font-size: clamp(1.2rem, 2.6vw, 1.55rem);
+      line-height: 1.6;
+      color: var(--ink);
+    }
+
+    .letter-text p {
+      margin: 0 0 18px;
+    }
+
+    .letter-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .letter-sign {
+      margin-top: 26px;
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      font-size: 1.7rem;
+      color: var(--blush);
+      text-align: right;
+    }
+
+    @media (max-width: 560px) {
+      .letter-paper {
+        padding: 40px 24px 32px;
+      }
+
+      .tape {
+        width: 60px;
+        height: 22px;
+      }
+
+      .letter-stamp {
+        width: 50px;
+        height: 50px;
+        font-size: .5rem;
+        top: 16px;
+        right: 16px;
+      }
+    }
+
+    /* ---------- CLOSING ---------- */
+    #closing {
+      text-align: center;
+      padding-bottom: 130px;
+    }
+
+    #closing .frame {
+      display: inline-block;
+      border: 10px solid #fff;
+      box-shadow: 0 14px 40px var(--paper-shadow);
+      background: linear-gradient(150deg, var(--cream-2), #EADCC7);
+      padding: 46px 38px;
+      max-width: 560px;
+      transform: rotate(-1deg);
+    }
+
+    #closing h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      color: var(--navy);
+      margin: 0 0 14px;
+    }
+
+    #closing p.msg {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      line-height: 1.55;
+      color: var(--ink);
+      margin: 0;
+    }
+
+    .signature {
+      margin-top: 22px;
+      font-family: 'Caveat', cursive;
+      font-size: 1.4rem;
+      color: var(--blush);
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: .72rem;
+      opacity: .45;
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (max-width: 560px) {
+      section {
+        padding: 64px 18px;
+      }
+
+      .card {
+        height: 260px;
+      }
+
+      .sold-out {
+        position: static;
+        display: inline-block;
+        margin: 6px 0 0;
+        transform: rotate(-2deg);
+      }
+
+      .letter-date {
+        padding-right: 62px;
+      }
+
+      .stub {
+        padding: 38px 28px 32px;
+      }
+
+      .video-frame {
+        padding: 10px;
+      }
+
+      #closing .frame {
+        padding: 36px 26px;
+      }
+
+      .gallery {
+        gap: 26px 16px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .hero-sub {
+        font-size: .95rem;
+      }
+
+      .ticket {
+        font-size: .78rem;
+        padding: 10px 18px;
+      }
+
+      .t-item {
+        padding-left: 62px;
+      }
+
+      .t-lock {
+        left: 62px;
+      }
+
+      .letter-paper {
+        padding: 40px 18px 28px;
+      }
+
+      .letter-stamp {
+        width: 44px;
+        height: 44px;
+        font-size: .46rem;
+      }
+
+      .letter-date {
+        padding-right: 52px;
+        font-size: .95rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- definições escondidas dos stickers desenhados à mão -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="sketchy" x="-30%" y="-30%" width="160%" height="160%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="7" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.5" />
+      </filter>
+      <symbol id="doodle-heart" viewBox="0 0 100 90">
+        <path
+          d="M50 82 C20 60 4 40 4 24 C4 10 16 2 28 2 C38 2 46 8 50 18 C54 8 62 2 72 2 C84 2 96 10 96 24 C96 40 80 60 50 82 Z"
+          fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+      </symbol>
+      <symbol id="doodle-star" viewBox="0 0 100 100">
+        <path d="M50 6 L61 38 L96 38 L67 58 L78 92 L50 71 L22 92 L33 58 L4 38 L39 38 Z" fill="none"
+          stroke="currentColor" stroke-width="4.5" stroke-linejoin="round" />
+      </symbol>
+      <symbol id="doodle-note" viewBox="0 0 60 90">
+        <path d="M40 6 L40 60 M40 6 L54 12" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"
+          stroke-linejoin="round" />
+        <circle cx="31" cy="63" r="9.5" fill="none" stroke="currentColor" stroke-width="5" />
+      </symbol>
+      <symbol id="doodle-arrow" viewBox="0 0 140 60">
+        <path d="M4 46 C36 8 72 6 100 24 M84 12 L100 24 L86 36" fill="none" stroke="currentColor" stroke-width="4.5"
+          stroke-linecap="round" stroke-linejoin="round" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- decorative floating hearts (CSS only) -->
+  <div class="float-deco" aria-hidden="true">
+    <span style="left:8%;  animation-duration: 14s; animation-delay: 0s;">♡</span>
+    <span style="left:22%; animation-duration: 19s; animation-delay: 3s;">✦</span>
+    <span style="left:41%; animation-duration: 16s; animation-delay: 6s;">♡</span>
+    <span style="left:63%; animation-duration: 21s; animation-delay: 1s;">♡</span>
+    <span style="left:78%; animation-duration: 15s; animation-delay: 4s;">✦</span>
+    <span style="left:90%; animation-duration: 18s; animation-delay: 8s;">♡</span>
+  </div>
+
+  <!-- ENVELOPE / TICKET INTRO -->
+  <div id="envelope-screen">
+    <div class="stub" id="openStub" role="button" tabindex="0" aria-label="Abrir convite">
+      <small>ADMIT TWO · FILA A · SEÇÃO DIRECTIONER</small>
+      <h1>7 MESES<br>TOUR</h1>
+      <p>Um ingresso válido para uma noite só nossa.</p>
+      <div class="tap">toca aqui pra abrir
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <main id="main">
+
+    <section id="hero">
+      <div class="sticker" style="top:6%; left:3%; width:58px; color:var(--blush); transform:rotate(-14deg);">
+        <svg viewBox="0 0 100 90" style="filter:url(#sketchy)">
+          <use href="#doodle-heart" />
+        </svg>
+      </div>
+      <div class="sticker hide-mobile"
+        style="top:12%; right:6%; width:46px; color:var(--mustard); transform:rotate(10deg);">
+        <svg viewBox="0 0 100 100" style="filter:url(#sketchy)">
+          <use href="#doodle-star" />
+        </svg>
+      </div>
+      <div class="doodle-tag blush hide-mobile" style="top:2%; right:14%; transform:rotate(6deg);">nossa turnê ✦</div>
+      <span class="kicker">Nossa própria boy band de dois</span>
+      <h1 class="hero-names">CARLOS HENRIQUE<span class="amp">&amp;</span>ELEN AMBROSIO</h1>
+      <p class="hero-sub">Sete meses desde que a gente virou dupla. Se fosse uma turnê, esse seria só o primeiro show —
+        porque o resto da estrada eu quero inteira com você.</p>
+      <div class="ticket">Feliz 7 meses — <b>22 · 09 · 2026</b> — Show em andamento
+        <span class="sold-out">SOLD OUT</span>
+      </div>
+      <p class="x-factor-line">sem X Factor, sem jurado, sem plateia — só a gente decidindo que dava certo ✦</p>
+    </section>
+
+    <section id="timeline">
+      <div class="doodle-tag navy hide-mobile" style="top:0%; left:2%; transform:rotate(-8deg);">encore ♡</div>
+      <div class="sticker" style="top:2%; right:4%; width:44px; color:var(--navy); transform:rotate(-8deg);">
+        <svg viewBox="0 0 60 90" style="filter:url(#sketchy)">
+          <use href="#doodle-note" />
+        </svg>
+      </div>
+      <div class="section-head">
+        <span class="kicker">A setlist dos nossos meses</span>
+        <h2>Sete faixas, uma trilha só nossa</h2>
+        <p>Cada mês ganhou uma música.<br>Eu te dedico todas as músicas de amor, pois sempre lembro de você quando ouço.
+        </p>
+        <p class="eras-line">do nosso "Up All Night" inicial pro nosso próprio "Made in the A.M." — sem data pra acabar
+        </p>
+      </div>
+      <div class="timeline">
+        <div class="t-item" tabindex="0" role="button" aria-expanded="false">
+          <div class="t-num">1</div>
+          <div class="t-lock"><span>toca pra revelar ✦</span></div>
+          <div class="t-content">
+            <h3>Mês 1</h3>
+            <div class="song-row">
+              <button class="play-btn" data-track="music/mes1.mp3"
+                aria-label="Tocar trecho de What Makes You Beautiful">
+                <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
+                </svg>
+              </button>
+              <div class="song">What Makes You Beautiful</div>
+              <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+            </div>
+            <p>O começo de tudo, quando ainda estávamos descobrindo um ao outro — e eu já sabia que ia ser você.<br>
+              Você traz significado para a minha existência!!!
+            </p>
+          </div>
+        </div>
+        <div class="t-item" tabindex="0" role="button" aria-expanded="false">
+          <div class="t-num">2</div>
+          <div class="t-lock"><span>toca pra revelar ✦</span></div>
+          <div class="t-content">
+            <h3>Mês 2</h3>
+            <div class="song-row">
+              <button class="play-btn" data-track="music/mes2.mp3" aria-label="Tocar trecho de Little Things">
+                <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
+                </svg>
+              </button>
+              <div class="song">Little Things</div>
+              <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+            </div>
+            <p>Eu amo como as coisas pequenas do dia a dia viraram os meus momentos favoritos com você.<br>
+              Eu amo cada detalhe seu, pois tudo em você é muito especial, minha bbzinha!!!</p>
+          </div>
+        </div>
+        <div class="t-item" tabindex="0" role="button" aria-expanded="false">
+          <div class="t-num">3</div>
+          <div class="t-lock"><span>toca pra revelar ✦</span></div>
+          <div class="t-content">
+            <h3>Mês 3</h3>
+            <div class="song-row">
+              <button class="play-btn" data-track="music/mes3.mp3" aria-label="Tocar trecho de Story of My Life">
+                <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
+                </svg>
+              </button>
+              <div class="song">Truly Madly Deeply</div>
+              <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+            </div>
+            <p>Percebi que você não era mais só uma parte boa da minha história — você virou a história inteira.<br>
+              A melhor história que o destino poderia me dar!!!</p>
+          </div>
+        </div>
+        <div class="t-item" tabindex="0" role="button" aria-expanded="false">
+          <div class="t-num">4</div>
+          <div class="t-lock"><span>toca pra revelar ✦</span></div>
+          <div class="t-content">
+            <h3>Mês 4</h3>
+            <div class="song-row">
+              <button class="play-btn" data-track="music/mes4.mp3" aria-label="Tocar trecho de Night Changes">
+                <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
+                </svg>
+              </button>
+              <div class="song">I Want to Write You a Song</div>
+              <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+            </div>
+            <p>Aprendendo juntos, mudando juntos, e gostando de quem a gente vem se tornando.<br>
+              Eu poderia escrever um universo sobre você, meu amor, quem sabe um dia, hein? hehehehe</p>
+          </div>
+        </div>
+        <div class="t-item" tabindex="0" role="button" aria-expanded="false">
+          <div class="t-num">5</div>
+          <div class="t-lock"><span>toca pra revelar ✦</span></div>
+          <div class="t-content">
+            <h3>Mês 5</h3>
+            <div class="song-row">
+              <button class="play-btn" data-track="music/mes5.mp3" aria-label="Tocar trecho de History">
+                <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
+                </svg>
+              </button>
+              <div class="song">They Don't Know About Us</div>
+              <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+            </div>
+            <p>Já não dá mais pra imaginar a minha história sem a sua letra no meio dela.<br>
+              Obrigado por escrever essa história comigo, todos os dias, minha princesa!!! </p>
+          </div>
+        </div>
+        <div class="t-item" tabindex="0" role="button" aria-expanded="false">
+          <div class="t-num">6</div>
+          <div class="t-lock"><span>toca pra revelar ✦</span></div>
+          <div class="t-content">
+            <h3>Mês 6</h3>
+            <div class="song-row">
+              <button class="play-btn" data-track="music/mes6.mp3" aria-label="Tocar trecho de Perfect">
+                <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
+                </svg>
+              </button>
+              <div class="song">If I Could Fly</div>
+              <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+            </div>
+            <p>Não porque nada é perfeito — mas porque com você até o imperfeito fica bom.<br>
+              Sinceramente, você é a razão de eu estar fazendo o meu melhor, você me salvou, meu amor!!!</p>
+          </div>
+        </div>
+        <div class="t-item" tabindex="0" role="button" aria-expanded="false">
+          <div class="t-num">7</div>
+          <div class="t-lock"><span>toca pra revelar ✦</span></div>
+          <div class="t-content">
+            <h3>Mês 7</h3>
+            <div class="song-row">
+              <button class="play-btn" data-track="music/mes7.mp3" aria-label="Tocar trecho de Steal My Girl">
+                <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
+                </svg>
+              </button>
+              <div class="song">2 Much</div>
+              <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+            </div>
+            <p>Sete meses neném, obrigado por tudo o que faz por nós.<br>
+              Essa música não é do One Direction, mas senti que ela deveria estar aqui, pois sempre
+              que ouço, me lembro o quão foda é namorar com você.<br>
+              Say: Love you, under my breath.<br>
+              Music every time I hear your name.<br>
+              Eu te amo, nessa e em todas as outras vidas!!!!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <div class="doodle-tag blush hide-mobile" style="top:-2%; right:2%; transform:rotate(7deg);">track 01 ✦</div>
+      <div class="sticker hide-mobile"
+        style="bottom:4%; left:1%; width:50px; color:var(--blush); transform:rotate(12deg);">
+        <svg viewBox="0 0 100 90" style="filter:url(#sketchy)">
+          <use href="#doodle-heart" />
+        </svg>
+      </div>
+      <div class="section-head">
+        <span class="kicker">Álbum da turnê</span>
+        <h2>Nossos registros favoritos</h2>
+        <p>Toca nos cartões, tem um textinho nas fotos!.</p>
+      </div>
+
+      <div class="gallery" id="galleryGrid">
+        <!-- Cada .card é um cartão que vira. Troque o src da <img> pela sua foto (ex: foto1.jpg). -->
+        <div class="card">
+          <div class="flip">
+            <div class="face front">
+              <span class="tag">01</span>
+              <img src="img/foto1.jpeg" alt="Nossa foto 1"
+                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder',innerHTML:'<svg width=34 height=34 viewBox=\'0 0 24 24\' fill=\'none\'><path d=\'M4 7h3l1.5-2h7L17 7h3a1 1 0 011 1v11a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z\' stroke=\'%231F2A44\' stroke-width=\'1.4\'/><circle cx=\'12\' cy=\'13\' r=\'3.4\' stroke=\'%231F2A44\' stroke-width=\'1.4\'/></svg><span>foto1.jpg</span>'}))">
+            </div>
+            <div class="face back">
+              <p>Seu sorriso deixa o meu coração quentinho, você tem um sorriso lindo.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="flip">
+            <div class="face front">
+              <span class="tag">02</span>
+              <img src="img/foto2.jpeg" alt="Nossa foto 2"
+                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder',innerHTML:'<svg width=34 height=34 viewBox=\'0 0 24 24\' fill=\'none\'><path d=\'M4 7h3l1.5-2h7L17 7h3a1 1 0 011 1v11a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z\' stroke=\'%231F2A44\' stroke-width=\'1.4\'/><circle cx=\'12\' cy=\'13\' r=\'3.4\' stroke=\'%231F2A44\' stroke-width=\'1.4\'/></svg><span>foto2.jpg</span>'}))">
+            </div>
+            <div class="face back">
+              <p>Apreciar a vista com você é um privilégio enorme, amo estar com você bebê.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="flip">
+            <div class="face front">
+              <span class="tag">03</span>
+              <img src="img/foto3.jpeg" alt="Nossa foto 3"
+                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder',innerHTML:'<svg width=34 height=34 viewBox=\'0 0 24 24\' fill=\'none\'><path d=\'M4 7h3l1.5-2h7L17 7h3a1 1 0 011 1v11a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z\' stroke=\'%231F2A44\' stroke-width=\'1.4\'/><circle cx=\'12\' cy=\'13\' r=\'3.4\' stroke=\'%231F2A44\' stroke-width=\'1.4\'/></svg><span>foto3.jpg</span>'}))">
+            </div>
+            <div class="face back">
+              <p>Somos bons aventureiros, te agradeço por me proporcionar experiências incríveis, amorzão.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="flip">
+            <div class="face front">
+              <span class="tag">04</span>
+              <img src="img/foto4.jpeg" alt="Nossa foto 4"
+                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder',innerHTML:'<svg width=34 height=34 viewBox=\'0 0 24 24\' fill=\'none\'><path d=\'M4 7h3l1.5-2h7L17 7h3a1 1 0 011 1v11a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z\' stroke=\'%231F2A44\' stroke-width=\'1.4\'/><circle cx=\'12\' cy=\'13\' r=\'3.4\' stroke=\'%231F2A44\' stroke-width=\'1.4\'/></svg><span>foto4.jpg</span>'}))">
+            </div>
+            <div class="face back">
+              <p>Ser incluído e aprender sobre o seu mundo, é uma sensação indiscritível, amei correr com a minha
+                princesinha.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="flip">
+            <div class="face front">
+              <span class="tag">05</span>
+              <img src="img/foto5.jpeg" alt="Nossa foto 5"
+                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder',innerHTML:'<svg width=34 height=34 viewBox=\'0 0 24 24\' fill=\'none\'><path d=\'M4 7h3l1.5-2h7L17 7h3a1 1 0 011 1v11a1 1 0 01-1 1H4a1 1 0 0１-１V8a１ １ ０ ０１１-１z\' stroke=\'%23１F２A４４\' stroke-width=\'１.４\'/><circle cx=\'１２\' cy=\'１３\' r=\'３.４\' stroke=\'%23１F２A４４\' stroke-width=\'１.４\'/></svg><span>foto5.jpg</span>'}))">
+            </div>
+            <div class="face back">
+              <p>Exímios engenheiros, né? Com nosso filho Alvinho, você é uma mãe incrível. A gente é foda em tudo o que
+                faz!!!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="flip">
+            <div class="face front">
+              <span class="tag">06</span>
+              <img src="img/foto6.jpeg" alt="Nossa foto 6"
+                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder',innerHTML:'<svg width=34 height=34 viewBox=\'0 0 24 24\' fill=\'none\'><path d=\'M4 7h3l1.5-2h7L17 7h3a1 1 0 011 1v11a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z\' stroke=\'%231F2A44\' stroke-width=\'1.4\'/><circle cx=\'12\' cy=\'13\' r=\'3.4\' stroke=\'%231F2A44\' stroke-width=\'1.4\'/></svg><span>foto6.jpg</span>'}))">
+            </div>
+            <div class="face back">
+              <p>Eu gosto muito de cinema, e amo mais ainda pois você me acompanha. Obrigado por querer viver o meu
+                mundo comigo, vidona!!!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="flip">
+            <div class="face front">
+              <span class="tag">07</span>
+              <img src="img/foto7.jpeg" alt="Nossa foto 7"
+                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder',innerHTML:'<svg width=34 height=34 viewBox=\'0 0 24 24\' fill=\'none\'><path d=\'M4 7h3l1.5-2h7L17 7h3a1 1 0 011 1v11a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z\' stroke=\'%231F2A44\' stroke-width=\'1.4\'/><circle cx=\'12\' cy=\'13\' r=\'3.4\' stroke=\'%231F2A44\' stroke-width=\'1.4\'/></svg><span>foto7.jpg</span>'}))">
+            </div>
+            <div class="face back">
+              <p>Estar com você é estar em paz, eu não troco nossos momentos por nada. Você sempre será minha
+                prioridade!!!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="flip">
+            <div class="face front">
+              <span class="tag">08</span>
+              <img src="img\foto8.jpeg" alt="Nossa foto 8"
+                onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder',innerHTML:'<svg width=34 height=34 viewBox=\'0 0 24 24\' fill=\'none\'><path d=\'M4 7h3l1.5-2h7L17 7h3a1 1 0 011 1v11a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z\' stroke=\'%231F2A44\' stroke-width=\'1.4\'/><circle cx=\'12\' cy=\'13\' r=\'3.4\' stroke=\'%231F2A44\' stroke-width=\'1.4\'/></svg><span>foto8.jpg</span>'}))">
+            </div>
+            <div class="face back">
+              <p>Vamos conquistar o mundo, amor, com você, sei que sou capaz. Em algum momento, o álbum vai ser com você
+                de noiva...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section id="video-message">
+      <div class="section-head">
+        <span class="kicker">Bônus da turnê</span>
+        <h2>Um recado em vídeo</h2>
+        <p>Dessa vez a cartinha sou eu falando para você, meu anjo, mas dessa vez você não chora, pode deixar.</p>
+      </div>
+
+      <div class="video-wrap">
+        <div class="sticker hide-mobile"
+          style="top:-52px; right:6%; width:100px; color:var(--navy); transform:rotate(4deg) scaleX(-1);">
+          <svg viewBox="0 0 140 60" style="filter:url(#sketchy)">
+            <use href="#doodle-arrow" />
+          </svg>
+        </div>
+        <div class="video-frame" id="videoFrame">
+          <span class="rec-tag">● REC</span>
+          <!-- Vídeo hospedado no Google Drive. Pra trocar por outro vídeo:
+               1. Compartilhe o arquivo no Drive como "Qualquer pessoa com o link" (Leitor).
+               2. Pegue o ID do arquivo (o trecho entre /d/ e /view no link de compartilhamento).
+               3. Troque o ID abaixo no src do iframe. -->
+          <div class="drive-embed">
+            <iframe src="https://drive.google.com/file/d/1GPP4IJb7TDXupWIUDk5yaMtAI5Uhq_3v/preview" allow="autoplay"
+              allowfullscreen loading="lazy" title="Recado em vídeo para a Elen"></iframe>
+          </div>
+        </div>
+        <p class="hint">aperta o play pra assistir ✦</p>
+      </div>
+    </section>
+
+    <section id="letter">
+      <div class="doodle-tag hide-mobile" style="top:-2%; left:4%; transform:rotate(-6deg);">achei isso no seu bolso ♡
+      </div>
+      <div class="section-head">
+        <span class="kicker">Depois que as luzes apagam</span>
+        <h2>Uma cartinha só pra você</h2>
+        <p>Sim, acabou que eu fiz a cartinha, mas dessa vez foi digital.</p>
+      </div>
+
+      <div class="letter-wrap" id="letterWrap" tabindex="0" role="button" aria-expanded="false"
+        aria-label="Abrir a cartinha">
+        <span class="tape tape-left" aria-hidden="true"></span>
+        <span class="tape tape-right" aria-hidden="true"></span>
+        <div class="letter-paper">
+          <div class="letter-lock"><span>toca pra abrir a cartinha ✦</span></div>
+
+          <div class="letter-content">
+            <div class="letter-stamp">7 MESES<br>TOUR</div>
+            <p class="letter-date">Maracanaú, 22 de setembro</p>
+
+            <div class="song-row letter-song">
+              <button class="play-btn" data-track="music/carta.mp3" tabindex="-1"
+                aria-label="Tocar ou pausar a música da cartinha">
+                <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
+                </svg>
+              </button>
+              <div class="song">My Only One</div>
+              <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+            </div>
+
+            <div class="letter-text">
+              <p>Minha Bebêzinha,</p>
+              <p>Não é que eu chorei mesmo? Você talvez me pergunte o motivo, caso pergunte, já está aqui a resposta.
+                <br>Então, é bem da ora imaginar que achei alguém tão especial como você, que me enxerga de fato e me ama
+                assim como eu sou.
+                <br>Eu gosto de todos os dias que estamos juntos, mas esse mês de setembro tem algo de especial, sinto que
+                é a aproximação que estamos
+                tendo.
+                <br>Queria te dizer nesse mês uma coisa, no dia que a gente deu uma olhada no discord, tinha uma mensagem
+                assim: "Espero que não enjoe de mim".
+                <br> Já estamos juntos há 210 dias, e eu ainda sinto o mesmo amor que eu senti lá no início de tudo.
+                <br> É extremamente exímio ser seu, minha linda. Rir com você, cantar com você, andar com você, sonhar com
+                você, pensar com você,
+                tudo com você se torna divertido, é uma conexão inigulável. Obrigado por me abraçar quando o mundo parece
+                que vai cair.
+                <br>Todas as coisas me levam até você e é com você que eu quero estar, te amo incondicionalmente, neném,
+                estamos mais próximos
+                de realizar nossos sonhos, vamos conseguir, pois eu sei que com você, tudo é possível.
+                <center>
+                  <br>I remember when you kissed me,
+                  <br>I knew you were the one,
+                  <br>Oh, my hands were shaking.
+                </center>
+              </p>
+
+            </div>
+            <center>
+              <div class="letter-sign">To my baby, I love you sooooo much,
+                with all the affection in the world, from Carlos to Elen. ✦
+              </div>
+            </center>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="closing">
+      <div class="sticker" style="top:0%; left:8%; width:52px; color:var(--mustard); transform:rotate(-10deg);">
+        <svg viewBox="0 0 100 100" style="filter:url(#sketchy)">
+          <use href="#doodle-star" />
+        </svg>
+      </div>
+      <div class="doodle-tag hide-mobile" style="bottom:6%; right:6%; transform:rotate(-5deg);">the end? nunca.</div>
+      <div class="frame">
+        <h2>Fim de show,<br>início de tudo</h2>
+        <p class="msg">Sete meses são só o começo do nosso próprio álbum. Obrigado por dividir a sua história comigo —
+          eu quero continuar escrevendo a nossa por muito, muito tempo.<br>
+          O que será que vem no 8º mês? Vamos descobrir juntos!!!</p>
+        <div class="signature">com amor, Carlos. <br>EU TE AMO MUITOOOOOOOOOOOOOOOO!!!!!!! ✦</div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>De Carlos Henrique para Elen Ambrosio — 7 meses ✦<span class="fan-tag">DIRECTIONERS DESDE O INÍCIO</span>
+  </footer>
+
+  <script>
+    // abrir o convite
+    const stubEl = document.getElementById('openStub');
+    const envelope = document.getElementById('envelope-screen');
+    const main = document.getElementById('main');
+
+    function openInvite() {
+      envelope.classList.add('hidden');
+      main.classList.add('show');
+      setTimeout(() => { envelope.remove(); }, 950);
+    }
+    stubEl.addEventListener('click', openInvite);
+    stubEl.addEventListener('keypress', (e) => { if (e.key === 'Enter' || e.key === ' ') openInvite(); });
+
+    // preencher o fundo desfocado de cada foto (garante que a foto inteira
+    // sempre aparece, sem cortar rosto, e sem espaço vazio feio nas bordas)
+    document.querySelectorAll('.face.front img').forEach(img => {
+      function setupPhotoBg() {
+        const src = img.currentSrc || img.src;
+        img.parentElement.style.setProperty('--photo-bg', `url("${src}")`);
+        img.parentElement.classList.add('has-photo');
+      }
+      if (img.complete && img.naturalWidth > 0) { setupPhotoBg(); }
+      img.addEventListener('load', setupPhotoBg);
+    });
+
+    // virar os cartões (clique/toque)
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => card.classList.toggle('flipped'));
+    });
+
+    // tocar trecho da música de cada mês — cada mês fica "trancado"/apagado
+    // até ela clicar em cima; ao clicar, o texto revela completo e a música
+    // daquele mês toca, assim ela lê um de cada vez, no tempo dela.
+    // Coloque os arquivos dentro de uma pasta "music" ao lado deste HTML,
+    // nomeados mes1.mp3, mes2.mp3 ... mes7.mp3 (na ordem dos meses acima).
+    const audioCache = {};
+    let currentAudio = null;
+    let currentBtn = null;
+
+    const TRACK_VOLUME = 1;       // volume alvo de cada trecho
+    const FADE_IN_MS = 700;       // duração do fade suave no início
+    const FADE_OUT_MS = 900;      // duração do fade suave perto do fim do trecho
+    const FADE_OUT_STOP_MS = 350; // fade rápido (mas suave) ao pausar/trocar
+
+    function fadeVolume(audio, from, to, duration, onDone) {
+      clearInterval(audio._fadeTimer);
+      if (duration <= 0) {
+        audio.volume = to;
+        if (onDone) onDone();
+        return;
+      }
+      const steps = 24;
+      const stepTime = duration / steps;
+      let i = 0;
+      audio._fadeTimer = setInterval(() => {
+        i++;
+        const t = i / steps;
+        audio.volume = Math.max(0, Math.min(1, from + (to - from) * t));
+        if (i >= steps) {
+          clearInterval(audio._fadeTimer);
+          audio.volume = to;
+          if (onDone) onDone();
+        }
+      }, stepTime);
+    }
+
+    function setPlayingUI(btn, isPlaying) {
+      btn.classList.toggle('playing', isPlaying);
+      const eq = btn.parentElement.querySelector('.eq');
+      if (eq) eq.classList.toggle('active', isPlaying);
+    }
+
+    function getOrCreateAudio(src, btn) {
+      if (audioCache[src]) return audioCache[src];
+      const a = new Audio(src);
+      a.preload = 'none';
+      a._fadingOut = false;
+      // fade-out automático perto do fim do trecho, pra nunca cortar seco
+      a.addEventListener('timeupdate', () => {
+        if (!a._fadingOut && a.duration && isFinite(a.duration)) {
+          const remainingMs = (a.duration - a.currentTime) * 1000;
+          if (remainingMs <= FADE_OUT_MS) {
+            a._fadingOut = true;
+            fadeVolume(a, a.volume, 0, Math.max(remainingMs, 0));
+          }
+        }
+      });
+      a.addEventListener('ended', () => { if (currentBtn === btn) stopCurrent(); });
+      a.addEventListener('error', () => {
+        if (currentBtn === btn) stopCurrent();
+        alert('Não encontrei o arquivo "' + src + '". Crie uma pasta "music" ao lado deste HTML e coloque o trecho da música com esse nome.');
+      });
+      audioCache[src] = a;
+      return a;
+    }
+
+    function stopCurrent() {
+      if (currentAudio) {
+        const a = currentAudio;
+        clearInterval(a._fadeTimer);
+        fadeVolume(a, a.volume, 0, FADE_OUT_STOP_MS, () => { a.pause(); });
+      }
+      if (currentBtn) { setPlayingUI(currentBtn, false); }
+      currentAudio = null;
+      currentBtn = null;
+    }
+
+    function playTrack(btn) {
+      if (currentBtn === btn && currentAudio && !currentAudio.paused) return; // já tocando
+      stopCurrent();
+      const src = btn.dataset.track;
+      const audio = getOrCreateAudio(src, btn);
+      currentAudio = audio;
+      currentBtn = btn;
+      audio._fadingOut = false;
+      audio.currentTime = 0;
+      audio.volume = 0;
+      audio.play().then(() => {
+        setPlayingUI(btn, true);
+        fadeVolume(audio, 0, TRACK_VOLUME, FADE_IN_MS);
+      }).catch(() => { stopCurrent(); });
+    }
+
+    // clique/toque no botão de play isolado (não deve re-disparar o clique do card inteiro)
+    document.querySelectorAll('.play-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentBtn === btn && currentAudio && !currentAudio.paused) {
+          stopCurrent();
+        } else {
+          playTrack(btn);
+        }
+      });
+    });
+
+    // clique/toque em qualquer parte do mês: revela o texto (1ª vez) e toca a música;
+    // se já estava revelado, alterna tocar/pausar a faixa daquele mês
+    function activateTimelineItem(item) {
+      const btn = item.querySelector('.play-btn');
+      if (!btn) return;
+      if (!item.classList.contains('revealed')) {
+        item.classList.add('revealed');
+        item.setAttribute('aria-expanded', 'true');
+        playTrack(btn);
+      } else if (currentBtn === btn && currentAudio && !currentAudio.paused) {
+        stopCurrent();
+      } else {
+        playTrack(btn);
+      }
+    }
+
+    document.querySelectorAll('.t-item').forEach(item => {
+      item.addEventListener('click', () => activateTimelineItem(item));
+      item.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          activateTimelineItem(item);
+        }
+      });
+    });
+
+    // cartinha: começa apagada/borrada; ao clicar, revela e toca music/carta.mp3.
+    // Depois de aberta, o botão de play da cartinha alterna tocar/pausar.
+    const letterWrap = document.getElementById('letterWrap');
+    const letterBtn = letterWrap.querySelector('.play-btn');
+
+    function openLetter() {
+      if (letterWrap.classList.contains('revealed')) return;
+      letterWrap.classList.add('revealed');
+      letterWrap.setAttribute('aria-expanded', 'true');
+      letterWrap.removeAttribute('role');
+      letterWrap.removeAttribute('tabindex');
+      letterWrap.removeAttribute('aria-label');
+      letterBtn.tabIndex = 0;
+      playTrack(letterBtn);
+    }
+
+    letterWrap.addEventListener('click', openLetter);
+    letterWrap.addEventListener('keypress', (e) => {
+      if (e.target !== letterWrap) return;
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openLetter();
+      }
+    });
+
+  </script>
+
+</body>
+
+</html>
